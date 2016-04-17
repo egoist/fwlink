@@ -27,13 +27,14 @@ mongorito.connect(`localhost/${database.name}`)
 const model = module.exports = {}
 
 /**
- * Define User schema
+ * Define schemas
  */
 model.User = class User extends Model {}
+model.Link = class Link extends Model {}
 
 
 /**
- * manipulations
+ * User manipulations
  */
 model.allUsers = function* () {
   let users = yield model.User.find()
@@ -47,8 +48,8 @@ model.allUsers = function* () {
   return users
 }
 
-model.createUser = function* (userdata) {
-  const user = new model.User(userdata)
+model.createUser = function* (userData) {
+  const user = new model.User(userData)
   user.set('apiKey', uuid.v4())
   const createdUser = yield user.save()
   createdUser.unset('_id')
@@ -56,20 +57,44 @@ model.createUser = function* (userdata) {
   return createdUser.get()
 }
 
-model.login = function* (userdata) {
+model.login = function* (userData) {
   const user = yield model.User.or({
-    username: userdata.account
+    username: userData.account
   }, {
-    email: userdata.account
-  }).findOne({password: userdata.password})
+    email: userData.account
+  }).findOne({password: userData.password})
   return user && user.get()
 }
 
-model.userExists = function* (userdata) {
+model.userExists = function* (userData) {
   const user = yield model.User.or({
-    username: userdata.username,
+    username: userData.username,
   }, {
-    email: userdata.email
+    email: userData.email
   }).findOne()
   return user
+}
+
+model.getUser = function* (apiKey) {
+  const user = yield model.User.findOne({apiKey})
+  return user && user.get()
+}
+
+/**
+ * Link manipulations
+ */
+model.addLink = function* (linkData, uid) {
+  const link = new model.Link({
+    url: linkData.url,
+    hash: linkData.hash
+  })
+  link.set('user', uid)
+  const savedLink = yield link.save()
+  savedLink.unset('_id')
+  return savedLink.get()
+}
+
+model.getURLByHash = function* (hash) {
+  const link = yield model.Link.findOne({hash})
+  return link && link.get('url')
 }

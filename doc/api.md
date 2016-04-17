@@ -8,9 +8,9 @@ POST `/api/signup`
 
 |参数|必需|描述|
 |---|---|---|
-|userdata.username|√|用户名|
-|userdata.password|√|密码|
-|userdata.email|√|邮箱|
+|userData.username|√|用户名|
+|userData.password|√|密码|
+|userData.email|√|邮箱|
 
 成功返回结果:
 

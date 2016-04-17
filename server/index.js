@@ -16,6 +16,7 @@ dotenv.config()
  */
 const $ = require('./utils')
 const api = require('./api')
+const routes = require('./routes')
 
 /**
  * Create app instance
@@ -38,13 +39,12 @@ apiRouter.get('/', api.index)
 apiRouter.get('/users', api.users)
 apiRouter.post('/signup', api.signup)
 apiRouter.post('/signin', api.signin)
+apiRouter.post('/link', api.addLink)
 
 /**
  * Redirect to the real link by id
  */
-router.get('/link/:id', function* () {
-  this.body = `redirecting to ${this.params.id}...`
-})
+router.get('/link/:id', routes.linkId)
 
 /**
  * Serve the main Vue app
