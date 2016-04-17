@@ -19,7 +19,7 @@ const database = {
 /**
  * Establish MongoDB connection
  */
-mongorito.connect('localhost/fwlink_dev')
+mongorito.connect(`localhost/${database.name}`)
 
 /**
  * Expose model methods
