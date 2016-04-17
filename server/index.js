@@ -14,7 +14,7 @@ dotenv.config()
 /**
  * Load internal modules
  */
-const _ = require('./utils')
+const $ = require('./utils')
 const api = require('./api')
 
 /**
@@ -51,7 +51,7 @@ router.get('/link/:id', function* () {
  */
 router.get('*', function* () {
   this.set('Content-Type', 'text/html')
-  if (_.isDev) {
+  if ($.isDev) {
     this.body = 'Development index please visit <a href="http://localhost:3711">http://localhost:3711</a>'
   } else {
     yield sendfile(this, Path.join(__dirname, '../build/index.html'))
